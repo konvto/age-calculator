@@ -2,377 +2,546 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="google-site-verification" content="15WQgGezr9k3nyBK8rksJIL2W969pXJsmlbDzTnBaNU" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📅</text></svg>">
     
-    <title>Age Calculator</title>
-    <meta name="description" content="Calculate your age in years, months, and days with AgeBubble. A fun, free, and accurate online age calculator tool.">
-    <meta name="keywords" content="Age Calculator, Cute Age Calculator, Date of Birth Tool, Calculate Age Online">
-    <meta name="author" content="Your Website">
-
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Age Calculator – Know Your Real Age, Not Just a Number</title>
+    <meta name="description" content="Calculate your precise age in years, months, and days with ChronoAge. A modern, dark-mode enabled age calculator for birthdays and dates.">
+    <meta name="keywords" content="Age Calculator, Dark Mode Calculator, Date of Birth Calculator, Exact Age, Birthday Countdown">
+    <meta name="author" content="Your Brand">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
+        /* --- CORE VARIABLES --- */
         :root {
-            --bg-color: #e0e5ec;
+            --bg-main: #0b0c15;
+            --glass-card: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-glow: linear-gradient(90deg, #ff00cc, #333399);
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
             --primary: #6c5ce7;
-            --primary-shadow: #4a3bbfc4;
-            --text-main: #4a4a4a;
-            --white: #ffffff;
-            --shadow-light: #ffffff;
-            --shadow-dark: #a3b1c6;
+            --neon-blue: #00f2ff;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Nunito', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-main);
             color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* --- 1. SOFT MENU BAR --- */
+        /* --- AMBIENT BACKGROUND GLOW (The Unique Part) --- */
+        .glow-orb {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: -1;
+            animation: moveOrb 10s infinite alternate;
+        }
+        .orb-1 { top: -100px; left: -100px; background: #7000df; }
+        .orb-2 { bottom: 10%; right: -50px; background: #00d4ff; width: 300px; height: 300px; animation-delay: 2s; }
+
+        @keyframes moveOrb {
+            from { transform: translate(0, 0); }
+            to { transform: translate(30px, 50px); }
+        }
+
+        /* --- NAVIGATION --- */
         nav {
-            padding: 20px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--bg-color);
+            padding: 20px 5%;
+            background: rgba(11, 12, 21, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 10px 20px rgba(163, 177, 198, 0.3);
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-items {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-btn {
-            text-decoration: none;
-            color: var(--text-main);
+            font-size: 1.6rem;
             font-weight: 700;
-            padding: 10px 20px;
-            border-radius: 20px;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, #8b9bb4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 0.9rem;
             transition: 0.3s;
-            /* Neumorphic Shadow */
-            box-shadow: 6px 6px 12px var(--shadow-dark), 
-                       -6px -6px 12px var(--shadow-light);
         }
 
-        .nav-btn:hover {
-            color: var(--primary);
-            box-shadow: inset 6px 6px 12px var(--shadow-dark), 
-                        inset -6px -6px 12px var(--shadow-light);
-        }
+        .nav-links a:hover { color: var(--neon-blue); text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); }
 
-        /* --- 2. CALCULATOR SECTION --- */
+        /* --- MAIN LAYOUT --- */
         main {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 50px 20px;
+            padding: 40px 20px;
         }
 
-        .bubble-card {
+        /* --- CALCULATOR CARD --- */
+        .calc-container {
             width: 100%;
-            max-width: 500px;
-            background: var(--bg-color);
-            border-radius: 40px;
+            max-width: 550px;
+            background: var(--glass-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
             padding: 40px;
-            /* Soft 3D Effect */
-            box-shadow: 20px 20px 60px var(--shadow-dark), 
-                       -20px -20px 60px var(--shadow-light);
-            text-align: center;
-            margin-bottom: 60px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Shine effect on top of card */
+        .calc-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
         }
 
         h1 {
-            color: var(--primary);
-            font-weight: 900;
-            margin-bottom: 10px;
-        }
-
-        .desc {
+            text-align: center;
             margin-bottom: 30px;
-            color: #777;
+            font-size: 2rem;
         }
 
-        .input-wrapper {
+        .input-row {
             margin-bottom: 25px;
-            text-align: left;
         }
 
         label {
             display: block;
-            font-weight: 700;
             margin-bottom: 10px;
-            margin-left: 10px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         input[type="date"] {
             width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
             padding: 15px;
-            border: none;
-            border-radius: 20px;
-            background: var(--bg-color);
+            border-radius: 12px;
+            font-size: 1.1rem;
             outline: none;
-            color: var(--text-main);
-            font-weight: 700;
-            /* Inner Shadow for "Pressed" look */
-            box-shadow: inset 6px 6px 12px var(--shadow-dark), 
-                        inset -6px -6px 12px var(--shadow-light);
-            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .action-btn {
+        input[type="date"]:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+        }
+
+        /* CUSTOM BUTTON */
+        .calculate-btn {
             width: 100%;
             padding: 18px;
             border: none;
-            border-radius: 50px;
-            background: var(--primary);
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            font-size: 1.2rem;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 6px 6px 15px rgba(108, 92, 231, 0.4),
-                        -6px -6px 15px var(--shadow-light);
-            transition: 0.2s;
-        }
-
-        .action-btn:active {
-            transform: scale(0.98);
-            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2);
-        }
-
-        /* RESULT BUBBLES */
-        .result-area {
-            display: none; /* Hidden */
-            margin-top: 30px;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .age-bubble {
-            background: var(--bg-color);
-            border-radius: 30px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 8px 8px 16px var(--shadow-dark), 
-                       -8px -8px 16px var(--shadow-light);
-        }
-
-        .big-text {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--primary);
-        }
-
-        .small-text {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            color: #777;
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* --- 3. SEO ARTICLE (Clean Design) --- */
-        .content-container {
-            max-width: 800px;
-            width: 100%;
+        .calculate-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(118, 75, 162, 0.5);
         }
 
-        .article-card {
-            background: var(--bg-color);
-            border-radius: 30px;
-            padding: 40px;
-            box-shadow: 10px 10px 30px var(--shadow-dark), 
-                       -10px -10px 30px var(--shadow-light);
-        }
-
-        .article-card h2 {
-            color: var(--primary);
+        /* --- RESULTS SECTION --- */
+        .result-display {
             margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        .article-card h2:first-child { margin-top: 0; }
-        
-        .article-card p, .article-card li {
-            line-height: 1.8;
-            color: #555;
-            margin-bottom: 15px;
+            display: none;
+            animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* --- 4. FOOTER --- */
+        .main-stat {
+            text-align: center;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .years-big {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(to bottom, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .mini-card {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .mini-val { font-size: 1.2rem; font-weight: bold; color: var(--neon-blue); }
+        .mini-lbl { font-size: 0.75rem; color: var(--text-muted); }
+
+        /* --- SEO ARTICLE (Styled for Dark Mode) --- */
+        .seo-content {
+            max-width: 800px;
+            margin-top: 80px;
+            color: #b0b3c7;
+            line-height: 1.7;
+        }
+
+        .seo-content h2 {
+            color: #fff;
+            margin-bottom: 15px;
+            margin-top: 40px;
+            font-size: 1.8rem;
+        }
+
+        .seo-content p { margin-bottom: 20px; }
+
+        /* --- FOOTER --- */
         footer {
             margin-top: auto;
-            padding: 40px 20px;
-            text-align: center;
-            background: var(--bg-color);
-            box-shadow: 0 -10px 20px rgba(163, 177, 198, 0.2);
+            border-top: 1px solid var(--glass-border);
+            padding: 40px 5%;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .footer-links a {
-            margin: 0 15px;
+            color: var(--text-muted);
             text-decoration: none;
-            color: var(--text-main);
-            font-weight: 700;
-        }
-        .footer-links a:hover { color: var(--primary); }
-
-        /* Animation */
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
+            margin-right: 20px;
+            font-size: 0.9rem;
         }
 
-        @media (max-width: 600px) {
-            .nav-items { display: none; } /* Hide menu on mobile */
-            .bubble-card { padding: 25px; }
-            .big-text { font-size: 2rem; }
+        .footer-links a:hover { color: white; text-decoration: underline; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media(max-width: 768px) {
+            .years-big { font-size: 2.5rem; }
+            nav { justify-content: center; }
+            .nav-links { display: none; } /* Simplified mobile menu */
+            footer { flex-direction: column; text-align: center; }
+            .footer-links a { display: block; margin: 10px 0; }
         }
     </style>
 </head>
 <body>
 
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
     <nav>
-        <a href="#" class="logo">🔮 konvto.com</a>
-        <div class="nav-items">
-            <a href="#" class="nav-btn">Home</a>
-            <a href="#calc" class="nav-btn">Calculator</a>
-            <a href="#info" class="nav-btn">Guide</a>
+        <div class="logo">✦ konvto</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#tool">Calculator</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
         </div>
     </nav>
 
     <main>
-        <section class="bubble-card" id="calc">
-            <h1>Calculate Your Age</h1>
-            <p class="desc">Enter your birth date to see the magic.</p>
-
-            <div class="input-wrapper">
+        
+        <section class="calc-container" id="tool">
+            <h1>Age Calculator</h1>
+            
+            <div class="input-row">
                 <label>Date of Birth</label>
                 <input type="date" id="dob">
             </div>
-
-            <div class="input-wrapper">
-                <label>Age As Of (Default: Today)</label>
-                <input type="date" id="target">
+            
+            <div class="input-row">
+                <label>Compare With (Today)</label>
+                <input type="date" id="compareDate">
             </div>
 
-            <button class="action-btn" onclick="calculateBubbleAge()">Calculate Now</button>
+            <button class="calculate-btn" onclick="calculateStats()">REVEAL MY AGE</button>
 
-            <div class="result-area" id="result">
-                <div class="age-bubble">
-                    <span class="big-text" id="years">0</span>
-                    <div class="small-text">Years Old</div>
+            <div class="result-display" id="resultBox">
+                <div class="main-stat">
+                    <div class="years-big" id="resYears">0</div>
+                    <div style="color: var(--text-muted); margin-top: 5px;">Years Old</div>
                 </div>
+
+                <div class="stat-grid">
+                    <div class="mini-card">
+                        <div class="mini-val" id="resMonths">0</div>
+                        <div class="mini-lbl">Months</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-val" id="resDays">0</div>
+                        <div class="mini-lbl">Days</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-val" id="resNextBday">0</div>
+                        <div class="mini-lbl">Days to B-Day</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-val" id="resDayName">--</div>
+                        <div class="mini-lbl">Born On</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <article class="seo-content" id="about">
+            <h2>What Is an Age Calculator?</h2>
+            <p>
+               An Age Calculator is an online tool that calculates the exact time difference between your date of birth and the current date (or any selected date). It shows your age clearly in a format that is easy to understand.
+            </p>
+			
+			<p>
+               Manual age calculation often leads to mistakes, especially when leap years or different month lengths are involved. This tool removes all such errors and gives a precise result in seconds.
+            </p>
+
+            <h2>Why Knowing Your Exact Age Is Important</h2>
+            <p>
+                Many people think age is a simple thing, but in real life, accuracy is very important.
+            </p>
+			
+			 <p>
+                You need your exact age for.
+            </p>
+			
+			 <ul>
+                <li>Government job applications.</li>
+                <li>Competitive exams and eligibility checks.</li>
+                <li>School and college admissions.</li>
+				
+				 <li>Passport, visa, and legal documents.</li>
+                <li>Insurance and official records.</li>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="age-bubble">
-                        <span class="big-text" style="font-size: 1.5rem;" id="months">0</span>
-                        <div class="small-text">Months</div>
-                    </div>
-                    <div class="age-bubble">
-                        <span class="big-text" style="font-size: 1.5rem;" id="days">0</span>
-                        <div class="small-text">Days</div>
-                    </div>
-                </div>
+            </ul>
+			
+			 <p>
+                Even a one-day difference can cause rejection in some applications. An Age Calculator ensures you never face such problems.
+            </p>
+			
+			
+			  <h2>How Does the Age Calculator Work?</h2>
+            <p>
+                The Age Calculator works by comparing two dates:
+            </p>
+			
+			 
+			
+			 <ul>
+                <li>Your date of birth.</li>
+                <li>The current date or a selected date.</li>
+                
+            </ul>
+			
+			 <p>
+                It then calculates the difference using a real calendar system that considers:.
+            </p>
+			
+			 <ul>
+                <li>Leap years.</li>
+                <li>Different number of days in each month</li>
+				<li>Exact day count</li>
+                
+            </ul>
+ <p>
+               This makes the calculation reliable and trustworthy.
+            </p>
+            <h2>How to Use the Age Calculator Online</h2>
+			
+			<p> Using this tool is very simple and does not require any technical knowledge. </p> 
+			
+			<p> Step-by-Step Guide: </p>
+            <ul>
+                <li>Enter your Date of Birth.</li>
+                <li>Select today’s date or any custom date.</li>
+                <li>Click on the Calculate Age button.</li>
+				 <li>Instantly view your exact age in years, months, and days.</li>
+            </ul>
+			
+			<p>There is no registration, no login, and no personal data is stored.</p>
+			
+			
+			            <h2>Is the Age Calculator Accurate and Safe?</h2>
+						
+						<p> Yes.
+ </p>
+						
+									<p> Our Age Calculator uses a standard date calculation method and provides highly accurate results. It does not collect or store any personal data, making it completely safe to use.</p>
+									
+									
+							 <h2>Benefits of Using an Online Age Calculator</h2>
+			
+			
+			<p>Using an online Age Calculator saves time and avoids stress.</p>
+						<p>Major Benefits:</p>
 
-                <div class="age-bubble">
-                    <div class="small-text">Born on a</div>
-                    <span class="big-text" style="font-size: 1.8rem; color: #333;" id="dayName">--</span>
-                </div>
-            </div>
-        </section>
+			
+			
+			
+            <ul>
+                <li>No manual calculation required.</li>
+                <li>Eliminates human error.</li>
+                <li>Instant and clear results</li>
+				 <li>Useful for both personal and official use</li>
+				 				 <li>Accessible anytime, anywhere</li>
 
-        <section class="content-container" id="info">
-            <article class="article-card">
-                <h2>Why Use This Age Calculator?</h2>
-                <p>
-                    Calculating your age manually can be confusing, especially when dealing with leap years and months with different numbers of days. Our Age Calculator Pro simplifies this process, giving you a precise breakdown of your age in seconds.
+            </ul>
+			
+			<p>This tool is especially helpful for students and job aspirants..</p>
+					
+									
+<section class="faq-section">
+  <h2>Frequently Asked Questions (FAQ)</h2>
+
+  <div class="faq-item">
+    <h3>What is an Age Calculator?</h3>
+    <p>
+      An Age Calculator is an online tool that helps you calculate your exact age
+      based on your date of birth. It shows your age in years, months, and days
+      accurately.
+    </p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Is this Age Calculator free to use?</h3>
+    <p>
+      Yes, this Age Calculator is completely free to use. There are no hidden
+      charges, subscriptions, or login requirements.
+    </p>
+  </div>
+
+  <div class="faq-item">
+    <h3>How accurate is the Age Calculator?</h3>
+    <p>
+      The Age Calculator is highly accurate. It follows standard calendar rules,
+      including leap years and different month lengths, to provide correct
+      results.
+    </p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Can I calculate my age for a future or past date?</h3>
+    <p>
+      Yes, you can calculate your age for any past or future date by selecting
+      a custom date instead of today’s date.
+    </p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Is the Age Calculator safe to use?</h3>
+    <p>
+      Yes, the Age Calculator is completely safe. It does not store or share any
+      personal data entered by users.
+    </p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Can I use this Age Calculator for government exams and job applications?</h3>
+    <p>
+      Yes, this Age Calculator is suitable for checking age eligibility for
+      government exams, job applications, admissions, and other official purposes.
+    </p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Does the Age Calculator work on mobile devices?</h3>
+    <p>
+      Yes, the Age Calculator is fully responsive and works smoothly on mobile
+      phones, tablets, and desktop devices.
+    </p>
+  </div>
+
+</section>
 
 
-                </p>
-
-                <h2>How to Calculate Your Age Online
-</h2>
-                <ol style="padding-left: 20px; color: #555;">
-                    <li><strong>Step 1:</strong> Select your Date of Birth from the calendar picker.</li>
-                    <li><strong>Step 2:</strong>  Choose the date you want to calculate your age against (defaults to today).</li>
-                    <li><strong>Step 3: :</strong>Click the "Calculate My Age" button.</li>
-                </ol>
-                <p>Our tool instantly processes the data to show you exactly how many years, months, and days you have been alive.
-
-</p>
-
-                <h2>Features of Our Tool
-</h2>
-                <p>
-                    We provide more than just your age. Discover exactly which day of the week you were born on (Monday, Tuesday, etc.) and see a countdown to your next birthday. This makes it perfect for planning parties or filling out official government forms.
-
-.
-                </p>
-            </article>
-        </section>
+        </article>
     </main>
 
     <footer>
+        <div class="brand">
+            <span style="color:white; font-weight:bold;">konvto</span> &copy; 2025
+        </div>
         <div class="footer-links">
-            <a href="#">Privacy</a>
+            <a href="#">Privacy Policy</a>
             <a href="#">Terms</a>
             <a href="about.html">About Us</a>
         </div>
-        <p style="margin-top: 20px; opacity: 0.6; font-size: 0.8rem;">&copy; 2025 konvto.com</p>
     </footer>
 
     <script>
-        // Set Today's Date
-        document.getElementById('target').valueAsDate = new Date();
+        // Set Default Date
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById('compareDate').value = today;
 
-        function calculateBubbleAge() {
-            const dobVal = document.getElementById('dob').value;
-            const targetVal = document.getElementById('target').value;
-            const resultArea = document.getElementById('result');
+        function calculateStats() {
+            const dobInput = document.getElementById('dob').value;
+            const targetInput = document.getElementById('compareDate').value;
+            const resBox = document.getElementById('resultBox');
 
-            if (!dobVal) {
-                alert("Please pop in your birth date first! 🎈");
+            if (!dobInput) {
+                alert("Please select your birth date first.");
                 return;
             }
 
-            const dob = new Date(dobVal);
-            const target = new Date(targetVal);
+            const dob = new Date(dobInput);
+            const target = new Date(targetInput);
 
-            if (dob > target) {
-                alert("Birth date can't be in the future!");
-                return;
-            }
-
-            // Calculation
+            // Basic Age Calc
             let years = target.getFullYear() - dob.getFullYear();
             let months = target.getMonth() - dob.getMonth();
             let days = target.getDate() - dob.getDate();
 
             if (days < 0) {
-                const prevMonth = new Date(target.getFullYear(), target.getMonth(), 0);
-                days += prevMonth.getDate();
+                const prev = new Date(target.getFullYear(), target.getMonth(), 0);
+                days += prev.getDate();
                 months--;
             }
             if (months < 0) {
@@ -380,20 +549,28 @@
                 months += 12;
             }
 
+            // Next Birthday Calc
+            const currentYear = target.getFullYear();
+            let nextBday = new Date(currentYear, dob.getMonth(), dob.getDate());
+            if (target > nextBday) {
+                nextBday.setFullYear(currentYear + 1);
+            }
+            const oneDay = 24 * 60 * 60 * 1000;
+            const daysToBday = Math.ceil((nextBday - target) / oneDay);
+
+            // Day Name
             const daysArr = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
             const dayName = daysArr[dob.getDay()];
 
-            // Update UI
-            document.getElementById('years').innerText = years;
-            document.getElementById('months').innerText = months;
-            document.getElementById('days').innerText = days;
-            document.getElementById('dayName').innerText = dayName;
-
-            // Show with animation
-            resultArea.style.display = "block";
+            // Update UI with Animation
+            resBox.style.display = "block"; // Trigger layout
+            
+            document.getElementById('resYears').innerText = years;
+            document.getElementById('resMonths').innerText = months;
+            document.getElementById('resDays').innerText = days;
+            document.getElementById('resNextBday').innerText = daysToBday;
+            document.getElementById('resDayName').innerText = dayName;
         }
     </script>
 </body>
-
 </html>
-
